@@ -1,0 +1,459 @@
+{
+	"info": {
+		"_postman_id": "3cd91d53-ddf2-45e8-a304-e86dd1cb49d6",
+		"name": "Invalid Scenarios API Todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "GetAllProjectsForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`Forbidden`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateNewProjecForbidden",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"projectName\", \"Project Created from Postman\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Create a Project\", () => {",
+									"    pm.response.to.have.body(`Forbidden`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{projectName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAProjectForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get a Project\", () => {",
+									"    pm.response.to.have.body(`Forbidden`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAProjectForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Update a Project\", () => {",
+									"    pm.response.to.have.body(`Forbidden`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Project Updated from Postman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Delete a Project\", () => {",
+									"    pm.response.to.have.body(`Forbidden`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "GetActiveTasksForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`Empty token\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateANewTaskForbidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`Empty token\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAnActiveTaskNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`404 page not found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateATaskNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`404 page not found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CloseATaskNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`404 page not found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}/close",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}",
+								"close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReopenATaskNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`404 page not found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}/reopen",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}",
+								"reopen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteATaskNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the updated project",
+									"pm.test(\"Forbidden Get All Projects\", () => {",
+									"    pm.response.to.have.body(`404 page not found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "projectName",
+			"value": ""
+		}
+	]
+}

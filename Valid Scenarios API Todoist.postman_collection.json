@@ -1,0 +1,906 @@
+{
+	"info": {
+		"_postman_id": "2541987e-038c-45bf-bdd5-892adfb89b5d",
+		"name": "Valid Scenarios API Todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "GetAllProjects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Get All Projects test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate all the projects goten from API (Custom)",
+									"pm.test(\"Validate based on custom structure Get All Projects test\", () => {",
+									"    let projects = pm.response.json();",
+									"    projects.forEach(function (project) {",
+									"        let projectid = project.id;",
+									"        pm.expect(project.id).not.eql(null);",
+									"        pm.expect(project.color).not.eql(null);",
+									"        pm.expect(project.name).not.eql(null);",
+									"        pm.expect(project.shared).not.eql(null);",
+									"        pm.expect(project.favorite).not.eql(null);",
+									"        pm.expect(project.url).to.eql(\"https://todoist.com/showProject?id=\" + projectid);",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateNewProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Create a Project test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the created project",
+									"pm.test(\"Project Created from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    let projectid = responseJson.id;",
+									"    pm.expect(responseJson.id).not.eql(null);",
+									"    pm.expect(responseJson.name).to.eql(pm.collectionVariables.get(\"projectName\"));",
+									"    pm.expect(responseJson.shared).to.eql(false);",
+									"    pm.expect(responseJson.favorite).to.eql(false);",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showProject?id=\"+projectid);",
+									"    //Defining collection Variable for next TestCase",
+									"    pm.collectionVariables.set(\"projectId\", projectid);",
+									"});",
+									"",
+									"//Test to validate the schema of createdProject",
+									"pm.test(\"Project Created from Postman Schema test\", () => {",
+									"    const expectedSchemaProject = {",
+									"        \"type\": \"object\",",
+									"        \"properties\": {",
+									"            \"id\": {\"type\": \"integer\"},",
+									"            \"color\": {\"type\": \"integer\"},",
+									"            \"name\": {\"type\": \"string\"},",
+									"            \"comment_count\": {\"type\": \"integer\"},",
+									"            \"shared\": {\"type\": \"boolean\"},",
+									"            \"favorite\": {\"type\": \"boolean\"},",
+									"            \"sync_id\": {\"type\": \"integer\"},",
+									"            \"inbox_project\": {\"type\": \"boolean\"},",
+									"            \"url\": {\"type\": \"string\"}",
+									"        }",
+									"    }",
+									"    pm.response.to.have.jsonSchema(expectedSchemaProject)",
+									"});",
+									"",
+									"//Test to validate the value of Content-Type header propoerty",
+									"pm.test(\"Content-Type is present and its value is application/json\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json\")",
+									"});",
+									"",
+									"pm.collectionVariables.unset(\"projectName\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"projectName\", \"Project Created from Postman\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{projectName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Get A Project test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the schema of gotten Project",
+									"pm.test(\"Project Gotten from Postman Schema test\", () => {",
+									"    const expectedSchemaProject = {",
+									"        \"type\": \"object\",",
+									"        \"properties\": {",
+									"            \"id\": {\"type\": \"integer\"},",
+									"            \"color\": {\"type\": \"integer\"},",
+									"            \"name\": {\"type\": \"string\"},",
+									"            \"comment_count\": {\"type\": \"integer\"},",
+									"            \"shared\": {\"type\": \"boolean\"},",
+									"            \"favorite\": {\"type\": \"boolean\"},",
+									"            \"sync_id\": {\"type\": \"integer\"},",
+									"            \"inbox_project\": {\"type\": \"boolean\"},",
+									"            \"url\": {\"type\": \"string\"},",
+									"        }",
+									"    }",
+									"    pm.response.to.have.jsonSchema(expectedSchemaProject)",
+									"});",
+									"",
+									"//Test to validate the gotten project",
+									"pm.test(\"Project Gotten from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.id).eql(pm.collectionVariables.get(\"projectId\"));",
+									"    pm.expect(responseJson.name).to.eql(\"Project Created from Postman\");",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showProject?id=\"+pm.collectionVariables.get(\"projectId\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from request update a project",
+									"pm.test(\"Update a project status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Project Updated from Postman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateUpdatedProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the  updated project status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the updated project",
+									"pm.test(\"Project Updated from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.id).eql(pm.collectionVariables.get(\"projectId\"));",
+									"    pm.expect(responseJson.name).to.eql(\"Project Updated from Postman\");",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showProject?id=\"+pm.collectionVariables.get(\"projectId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteAProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the delete project status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/projects/{{projectId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"projects",
+								"{{projectId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Test to validate the response time less to 500ms",
+							"pm.test(\"Response time is less than 500ms of all Test from Projects folder\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "GetActiveTasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Get All Tesks test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate all the tasks goten from API (Custom)",
+									"pm.test(\"Validate based on custom structure Get All Tasks test\", () => {",
+									"    let tasks = pm.response.json();",
+									"    tasks.forEach(function (task) {",
+									"        let taskId = task.id;",
+									"        pm.expect(task.id).not.eql(null);",
+									"        pm.expect(task.assigner).not.eql(null);",
+									"        pm.expect(task.project_id).not.eql(null);",
+									"        pm.expect(task.section_id).not.eql(null);",
+									"        pm.expect(task.order).not.eql(null);",
+									"        pm.expect(task.content).not.eql(null);",
+									"        pm.expect(task.description).not.eql(null);",
+									"        pm.expect(task.completed).not.eql(null);",
+									"        pm.expect(task.priority).not.eql(null);",
+									"        pm.expect(task.comment_count).not.eql(null);",
+									"        pm.expect(task.creator).not.eql(null);",
+									"        pm.expect(task.priority).not.eql(null);",
+									"        pm.expect(task.url).to.eql(\"https://todoist.com/showTask?id=\" + taskId);",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateANewTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Create a Tasks test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the created project",
+									"pm.test(\"Task Created from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    let taskId = responseJson.id;",
+									"    pm.expect(responseJson.id).not.eql(null);",
+									"    pm.expect(responseJson.content).to.eql(pm.collectionVariables.get(\"taskContent\"));",
+									"    pm.expect(responseJson.description).to.eql(\"NazaevanTaskDescriptionFromPostman\");",
+									"    pm.expect(responseJson.completed).to.eql(false);",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showTask?id=\"+taskId);",
+									"    //Defining collection Variable for next TestCase",
+									"    pm.collectionVariables.set(\"taskId\", taskId);",
+									"});",
+									"",
+									"//Test to validate the schema of createdProject",
+									"pm.test(\"Task Created from Postman Schema test\", () => {",
+									"    const expectedSchemaProject = {",
+									"        \"type\": \"object\",",
+									"        \"properties\": {",
+									"            \"id\": {\"type\": \"integer\"},",
+									"            \"assigner\": {\"type\": \"integer\"},",
+									"            \"project_id\": {\"type\": \"integer\"},",
+									"            \"section_id\": {\"type\": \"integer\"},",
+									"            \"order\": {\"type\": \"integer\"},",
+									"            \"content\": {\"type\": \"string\"},",
+									"            \"description\": {\"type\": \"string\"},",
+									"            \"completed\": {\"type\": \"boolean\"},",
+									"            \"priority\": {\"type\": \"integer\"},",
+									"            \"comment_count\": {\"type\": \"integer\"},",
+									"            \"creator\": {\"type\": \"integer\"},",
+									"            \"created\": {\"type\": \"string\"},",
+									"            \"due\": {\"type\": \"object\"},",
+									"            \"url\": {\"type\": \"string\"},",
+									"        }",
+									"    }",
+									"    pm.response.to.have.jsonSchema(expectedSchemaProject)",
+									"});",
+									"",
+									"//Test to validate the value of Content-Type header propoerty",
+									"pm.test(\"Content-Type is present and its value is application/json\", function () {",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json\")",
+									"});",
+									"",
+									"pm.collectionVariables.unset(\"taskContent\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"taskContent\", \"NazaevanTaskFromPostman\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"{{taskContent}}\",\n    \"description\": \"NazaevanTaskDescriptionFromPostman\",\n    \"due_string\": \"tomorrow at 12:00\",\n    \"due_lang\": \"en\",\n    \"priority\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAnActiveTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test to validate the status code from API",
+									"pm.test(\"Status code Get A Task test\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the schema of gotten Project",
+									"pm.test(\"Task Gotten from Postman Schema test\", () => {",
+									"    const expectedSchemaProject = {",
+									"        \"type\": \"object\",",
+									"        \"properties\": {",
+									"            \"id\": {\"type\": \"integer\"},",
+									"            \"color\": {\"type\": \"integer\"},",
+									"            \"name\": {\"type\": \"string\"},",
+									"            \"comment_count\": {\"type\": \"integer\"},",
+									"            \"shared\": {\"type\": \"boolean\"},",
+									"            \"favorite\": {\"type\": \"boolean\"},",
+									"            \"sync_id\": {\"type\": \"integer\"},",
+									"            \"inbox_project\": {\"type\": \"boolean\"},",
+									"            \"url\": {\"type\": \"string\"},",
+									"        }",
+									"    }",
+									"    pm.response.to.have.jsonSchema(expectedSchemaProject)",
+									"});",
+									"",
+									"//Test to validate the gotten project",
+									"pm.test(\"Task Gotten from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.id).eql(pm.collectionVariables.get(\"taskId\"));",
+									"    pm.expect(responseJson.content).to.eql(\"NazaevanTaskFromPostman\");",
+									"    pm.expect(responseJson.description).to.eql(\"NazaevanTaskDescriptionFromPostman\");",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showTask?id=\"+pm.collectionVariables.get(\"taskId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateATask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from request update a project",
+									"pm.test(\"Update a project status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"NazaevanTaskFromPostmanUpdated\",\n    \"description\": \"NazaevanTaskDescriptionFromPostmanUpdated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateUpdatedTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the  updated project status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the updated project",
+									"pm.test(\"Task Updated from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.id).eql(pm.collectionVariables.get(\"taskId\"));",
+									"    pm.expect(responseJson.content).to.eql(\"NazaevanTaskFromPostmanUpdated\");",
+									"    pm.expect(responseJson.description).to.eql(\"NazaevanTaskDescriptionFromPostmanUpdated\");",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showTask?id=\"+pm.collectionVariables.get(\"taskId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CloseATask",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}/close",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}",
+								"close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateClosedTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the  closed task status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"//Test to validate the updated project",
+									"pm.test(\"Task Updated from Postman test\", () => {",
+									"    pm.response.to.have.body(`Not Found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReopenATask",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}/reopen",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}",
+								"reopen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateReopenedTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the  updated project status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//Test to validate the updated project",
+									"pm.test(\"Task Updated from Postman test\", () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.id).eql(pm.collectionVariables.get(\"taskId\"));",
+									"    pm.expect(responseJson.content).to.eql(\"NazaevanTaskFromPostmanUpdated\");",
+									"    pm.expect(responseJson.description).to.eql(\"NazaevanTaskDescriptionFromPostmanUpdated\");",
+									"    pm.expect(responseJson.completed).to.eql(false)",
+									"    pm.expect(responseJson.url).to.eql(\"https://todoist.com/showTask?id=\"+pm.collectionVariables.get(\"taskId\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteATask",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateDeletedTask",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Validate ststus code from get updated project",
+									"pm.test(\"Get the  deleted task status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"//Test to validate the updated project",
+									"pm.test(\"Task Deleted from Postman test\", () => {",
+									"    pm.response.to.have.body(`Not Found\\n`)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiurl}}/rest/v1/tasks/{{taskId}}",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"rest",
+								"v1",
+								"tasks",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Test to validate the response time less to 500ms",
+							"pm.test(\"Response time is less than 500ms of all Test from Tasks folder\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});"
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "projectId",
+			"value": ""
+		},
+		{
+			"key": "taskId",
+			"value": ""
+		}
+	]
+}
